@@ -20,7 +20,7 @@ const createCodeVerification = (req, res) => __awaiter(void 0, void 0, void 0, f
     try {
         const token = Math.floor(100000 + Math.random() * 900000);
         const tokenObject = {
-            id: 3,
+            id: 4,
             CODE: token
         };
         const code = yield code_model_1.default.create(tokenObject);
