@@ -12,15 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recuperatePassword = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
+exports.recuperatePassword = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getUsers = void 0;
 // import { sendEmail } from "../../infraestructure/helpers/send-email";
-// import Code from "../../domain/models/code-model";
 const user_model_1 = __importDefault(require("../shared/models/user.model"));
 const code_model_1 = __importDefault(require("../shared/models/code.model"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_model_1.default.findAll({
         where: {
-            STATE: 1
+            STATE: true
         }
     });
     res.json({
@@ -28,7 +27,7 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getUsers = getUsers;
-const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const user = yield user_model_1.default.findByPk(id);
     if (user) {
@@ -43,10 +42,9 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
 });
-exports.getUser = getUser;
+exports.getUserById = getUserById;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    console.log(body);
     try {
         const emailExists = yield user_model_1.default.findOne({
             where: {
@@ -74,7 +72,9 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 message: 'This token is invalid, try again.'
             });
         }
-        const user = yield user_model_1.default.create(body);
+        const token = Math.floor(100000 + Math.random() * 900000);
+        const buildUser = Object.assign(Object.assign({}, body), { id: token });
+        const user = yield user_model_1.default.create(buildUser);
         res.json({
             user,
         });
@@ -115,7 +115,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             message: `Not exists an user with this ID`
         });
     }
-    yield user.update({ state: false });
+    yield user.update({ STATE: false });
     res.json({
         message: `User deleted`
     });
@@ -126,7 +126,7 @@ const recuperatePassword = (req, res) => __awaiter(void 0, void 0, void 0, funct
     try {
         const user = yield user_model_1.default.findOne({
             where: {
-                email: body.email
+                EMAIL: body.email
             }
         });
         if (!user) {
@@ -141,7 +141,7 @@ const recuperatePassword = (req, res) => __awaiter(void 0, void 0, void 0, funct
         }
         const verifyToken = yield code_model_1.default.findOne({
             where: {
-                code: body.code_confirmation
+                CODE: body.code_confirmation
             }
         });
         if (!verifyToken) {

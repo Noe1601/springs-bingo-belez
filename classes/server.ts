@@ -1,10 +1,7 @@
 import express, { Application } from 'express';
 import userRouter from '../shared/routes/users.routes';
 import codeRouter from '../shared/routes/code.routes';
-// import authRouter from '../../infraestructure/routes/auth.routes';
-// import codeRouter from '../../infraestructure/routes/code.routes';
-// import stablishmentRouter from '../../infraestructure/routes/stablishment.routes';
-// import workerRouter from '../../infraestructure/routes/worker.routes';
+import authRouter from '../shared/routes/auth.routes';
 import cors from 'cors';
 import db from '../db/connection';
 
@@ -40,10 +37,8 @@ export default class Server {
 
     routes(){
         this.app.use( this.paths.users, userRouter);
-        // this.app.use( this.paths.auth, authRouter );
+        this.app.use( this.paths.auth, authRouter );
         this.app.use( this.paths.code, codeRouter );
-        // this.app.use( this.paths.stablishment, stablishmentRouter );
-        // this.app.use( this.paths.workers, workerRouter );
     }
 
     middlewares(){

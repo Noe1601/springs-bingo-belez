@@ -12,7 +12,7 @@ export const createCodeVerification = async(req: Request, res: Response) => {
         const token = Math.floor(100000 + Math.random() * 900000)
 
         const tokenObject = {
-            id: 4,
+            id: token,
             CODE: token
         }
 
