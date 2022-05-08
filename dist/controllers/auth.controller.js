@@ -12,31 +12,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCodeVerification = void 0;
-const send_email_1 = require("../shared/helper/send-email");
-const code_model_1 = __importDefault(require("../shared/models/code.model"));
-const createCodeVerification = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.login = void 0;
+const user_model_1 = __importDefault(require("../shared/models/user.model"));
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
-        const token = Math.floor(100000 + Math.random() * 900000);
-        const tokenObject = {
-            id: token,
-            CODE: token
-        };
-        const code = yield code_model_1.default.create(tokenObject);
-        if (body.email) {
-            yield (0, send_email_1.sendEmail)(body.email, token.toString());
+        const userAuthenticate = yield user_model_1.default.findOne({
+            where: {
+                EMAIL: body.email,
+                PASSWORD: body.password
+            }
+        });
+        if (!userAuthenticate) {
+            return res.status(404).json({
+                ok: false,
+                message: 'Error in authentication, try again'
+            });
         }
         res.json({
-            code
+            userAuthenticate
         });
     }
     catch (error) {
-        res.status(500).json({
-            message: 'An unexpected error ocurred.'
-        });
         console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Unexpected error'
+        });
     }
 });
-exports.createCodeVerification = createCodeVerification;
-//# sourceMappingURL=code.controller.js.map
+exports.login = login;
+//# sourceMappingURL=auth.controller.js.map

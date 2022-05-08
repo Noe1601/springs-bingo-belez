@@ -15,10 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const users_routes_1 = __importDefault(require("../shared/routes/users.routes"));
 const code_routes_1 = __importDefault(require("../shared/routes/code.routes"));
-// import authRouter from '../../infraestructure/routes/auth.routes';
-// import codeRouter from '../../infraestructure/routes/code.routes';
-// import stablishmentRouter from '../../infraestructure/routes/stablishment.routes';
-// import workerRouter from '../../infraestructure/routes/worker.routes';
+const auth_routes_1 = __importDefault(require("../shared/routes/auth.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
@@ -48,10 +45,8 @@ class Server {
     }
     routes() {
         this.app.use(this.paths.users, users_routes_1.default);
-        // this.app.use( this.paths.auth, authRouter );
+        this.app.use(this.paths.auth, auth_routes_1.default);
         this.app.use(this.paths.code, code_routes_1.default);
-        // this.app.use( this.paths.stablishment, stablishmentRouter );
-        // this.app.use( this.paths.workers, workerRouter );
     }
     middlewares() {
         this.app.use((0, cors_1.default)());

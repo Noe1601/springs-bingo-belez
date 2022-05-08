@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { BulkRecordError } from "sequelize/types";
 // import { sendEmail } from "../../infraestructure/helpers/send-email";
-// import Code from "../../domain/models/code-model";
 import User from "../shared/models/user.model";
 import Code from "../shared/models/code.model";
 
@@ -9,7 +8,7 @@ export const getUsers = async(req: Request, res: Response) => {
 
     const users = await User.findAll({
         where: {
-            STATE: 1
+            STATE: true
         }
     });
 
@@ -18,7 +17,7 @@ export const getUsers = async(req: Request, res: Response) => {
     })
 }
 
-export const getUser = async(req: Request, res: Response) => {
+export const getUserById = async(req: Request, res: Response) => {
 
     const { id } = req.params;
 
@@ -42,7 +41,6 @@ export const createUser = async(req: Request, res: Response) => {
     
     const { body } = req;
 
-    console.log(body);
     try {
 
         const emailExists = await User.findOne({
@@ -77,7 +75,14 @@ export const createUser = async(req: Request, res: Response) => {
             })
         }
 
-        const user = await User.create(body);
+        const token = Math.floor(100000 + Math.random() * 900000)
+
+        const buildUser = {
+            ...body,
+            id: token
+        }
+
+        const user = await User.create(buildUser);
 
         res.json({
             user,
@@ -130,7 +135,7 @@ export const deleteUser = async(req: Request, res: Response) => {
         });
     }
 
-    await user.update({ state: false });
+    await user.update({ STATE: false });
 
     res.json({
         message: `User deleted`
@@ -147,7 +152,7 @@ export const recuperatePassword = async(req: Request, res: Response) => {
 
         const user = await User.findOne({ 
             where: {
-                email: body.email
+                EMAIL: body.email
             }
         });
 
@@ -165,7 +170,7 @@ export const recuperatePassword = async(req: Request, res: Response) => {
 
         const verifyToken = await Code.findOne({
             where: {
-                code: body.code_confirmation
+                CODE: body.code_confirmation
             }
         })
 
