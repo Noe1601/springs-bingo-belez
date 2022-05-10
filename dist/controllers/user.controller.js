@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.recuperatePassword = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getUsers = void 0;
-// import { sendEmail } from "../../infraestructure/helpers/send-email";
 const user_model_1 = __importDefault(require("../shared/models/user.model"));
 const code_model_1 = __importDefault(require("../shared/models/code.model"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {

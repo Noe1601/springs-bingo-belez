@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { BulkRecordError } from "sequelize/types";
-// import { sendEmail } from "../../infraestructure/helpers/send-email";
 import User from "../shared/models/user.model";
 import Code from "../shared/models/code.model";
 
