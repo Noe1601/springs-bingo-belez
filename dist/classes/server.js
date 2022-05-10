@@ -16,6 +16,9 @@ const express_1 = __importDefault(require("express"));
 const users_routes_1 = __importDefault(require("../shared/routes/users.routes"));
 const code_routes_1 = __importDefault(require("../shared/routes/code.routes"));
 const auth_routes_1 = __importDefault(require("../shared/routes/auth.routes"));
+const jugadas_routes_1 = __importDefault(require("../shared/routes/jugadas.routes"));
+const winners_routes_1 = __importDefault(require("../shared/routes/winners.routes"));
+const jugadores_routes_1 = __importDefault(require("../shared/routes/jugadores.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
@@ -24,8 +27,9 @@ class Server {
             users: '/api/users',
             auth: '/api/auth',
             code: '/api/code',
-            stablishment: '/api/stablishment',
-            workers: '/api/workers'
+            jugadas: '/api/jugadas',
+            winners: '/api/winners',
+            jugadores: '/api/jugadores'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -47,6 +51,9 @@ class Server {
         this.app.use(this.paths.users, users_routes_1.default);
         this.app.use(this.paths.auth, auth_routes_1.default);
         this.app.use(this.paths.code, code_routes_1.default);
+        this.app.use(this.paths.jugadas, jugadas_routes_1.default);
+        this.app.use(this.paths.winners, winners_routes_1.default);
+        this.app.use(this.paths.jugadores, jugadores_routes_1.default);
     }
     middlewares() {
         this.app.use((0, cors_1.default)());
