@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
+const menu_front_1 = require("../shared/helper/menu-front");
 const user_model_1 = __importDefault(require("../shared/models/user.model"));
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
@@ -30,7 +31,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             });
         }
         res.json({
-            userAuthenticate
+            userAuthenticate,
+            menu: (0, menu_front_1.getMenuFrontEnd)('ADMIN_ROLE')
         });
     }
     catch (error) {

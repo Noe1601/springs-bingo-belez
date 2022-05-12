@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getMenuFrontEnd } from '../shared/helper/menu-front';
 import User from '../shared/models/user.model';
 
 export const login = async(req: Request, res: Response) => {
@@ -22,7 +23,8 @@ export const login = async(req: Request, res: Response) => {
         }
 
         res.json({
-            userAuthenticate
+            userAuthenticate,
+            menu: getMenuFrontEnd('ADMIN_ROLE')
         })
 
         
