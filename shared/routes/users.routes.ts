@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { createUser, deleteUser, getUserById, getUsers, updateUser, recuperatePassword } from "../../controllers/user.controller";
+import { createUser, deleteUser, getUserById, getUsers, updateUser, recuperatePassword, getUsersDesactivated } from "../../controllers/user.controller";
 
 const router = Router();
 
 router.get('/', getUsers);
+
+router.get('/desactivated', getUsersDesactivated);
 
 router.get('/:id', getUserById);
 

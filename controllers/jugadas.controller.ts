@@ -1,37 +1,18 @@
 import { Request, Response } from "express";
 import Jugada from "../shared/models/jugada.model";
+import { create, deleteObject, get, getById, update } from "../shared/services/crud.service";
 
 export const getJugadas = async(req: Request, res: Response) => {
+    get({ where: { state: true }},req,res,Jugada);
+}
 
-    const jugadas = await Jugada.findAll({
-        where: {
-            state: true
-        }
-    });
-
-    res.json({
-        jugadas    
-    })
+export const getJugadasDesactivated = async(req: Request, res: Response) => {
+    get({ where: { state: false }},req,res,Jugada);
 }
 
 export const getJugadasById = async(req: Request, res: Response) => {
+    getById(req,res,Jugada);
 
-    const { id } = req.params;
-
-    const jugada = await Jugada.findByPk(id);
-
-    if(jugada){
-        res.json({
-            jugada
-        })
-    }else{
-        res.status(404).json({
-            ok: false,
-            message: `Not exists jugada with ${ id } number ID`
-        })
-    }
-
- 
 }
 
 export const createJugada = async(req: Request, res: Response) => {
@@ -59,11 +40,7 @@ export const createJugada = async(req: Request, res: Response) => {
             id: token
         }
 
-        const jugada = await Jugada.create(buildJugada);
-
-        res.json({
-            jugada
-        });
+        create(buildJugada,req,res,Jugada);
         
     } catch (error) {
         res.status(500).json({
@@ -75,47 +52,9 @@ export const createJugada = async(req: Request, res: Response) => {
 }
 
 export const  updateJugada = async(req: Request, res: Response) => {
-
-    const { body } = req;
-    const { id } = req.params;
-
-    try {
-
-        const jugada = await Jugada.findByPk(id);
-
-        if(!jugada){
-            return res.status(404).json({
-                message: `Not exists an jugada with this ID`
-            });
-        }
-
-        await jugada.update( body );
-        
-        res.json(jugada);
-
-    } catch (error) {
-        res.status(500).json({
-            message: 'An unexpected error ocurred.'
-        })
-    }
+    update(req,res,Jugada);
 }
 
 export const deleteJugada = async(req: Request, res: Response) => {
-
-    const { id } = req.params;
-
-    const user = await Jugada.findByPk(id);
-
-    if(!user){
-        return res.status(404).json({
-            message: `Not exists an jugada with this ID`
-        });
-    }
-
-    await user.update({ state: false });
-
-    res.json({
-        message: `Jugada deleted`
-    });
-
+    deleteObject({state: false},req,res,Jugada);
 }

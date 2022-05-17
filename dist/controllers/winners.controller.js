@@ -12,8 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateWinner = exports.createWinner = exports.getWinnersById = exports.getWinners = void 0;
+exports.deleteWinner = exports.updateWinner = exports.createWinner = exports.getWinnersById = exports.getWinners = void 0;
+const jugadores_model_1 = __importDefault(require("../shared/models/jugadores.model"));
 const winners_model_1 = __importDefault(require("../shared/models/winners.model"));
+const crud_service_1 = require("../shared/services/crud.service");
 const getWinners = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const winners = yield winners_model_1.default.findAll();
     res.json({
@@ -22,19 +24,7 @@ const getWinners = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getWinners = getWinners;
 const getWinnersById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const winner = yield winners_model_1.default.findByPk(id);
-    if (winner) {
-        res.json({
-            winner
-        });
-    }
-    else {
-        res.status(404).json({
-            ok: false,
-            message: `Not exists winner with ${id} number ID`
-        });
-    }
+    (0, crud_service_1.getById)(req, res, jugadores_model_1.default);
 });
 exports.getWinnersById = getWinnersById;
 const createWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -42,10 +32,7 @@ const createWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const token = Math.floor(100000 + Math.random() * 900000);
         const buildWinner = Object.assign(Object.assign({}, body), { id: token, jugada_id: body.jugada_id });
-        const winner = yield winners_model_1.default.create(buildWinner);
-        res.json({
-            winner
-        });
+        (0, crud_service_1.create)(buildWinner, req, res, winners_model_1.default);
     }
     catch (error) {
         res.status(500).json({
@@ -56,23 +43,11 @@ const createWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.createWinner = createWinner;
 const updateWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    const { id } = req.params;
-    try {
-        const winner = yield winners_model_1.default.findByPk(id);
-        if (!winner) {
-            return res.status(404).json({
-                message: `Not exists an winner with this ID`
-            });
-        }
-        yield winner.update(body);
-        res.json(winner);
-    }
-    catch (error) {
-        res.status(500).json({
-            message: 'An unexpected error ocurred.'
-        });
-    }
+    (0, crud_service_1.update)(req, res, winners_model_1.default);
 });
 exports.updateWinner = updateWinner;
+const deleteWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, crud_service_1.deleteDefinitive)(req, res, winners_model_1.default);
+});
+exports.deleteWinner = deleteWinner;
 //# sourceMappingURL=winners.controller.js.map

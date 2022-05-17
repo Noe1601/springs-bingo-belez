@@ -13,15 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
+const generate_jwt_1 = require("../shared/helper/generate-jwt");
 const menu_front_1 = require("../shared/helper/menu-front");
 const user_model_1 = __importDefault(require("../shared/models/user.model"));
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
         const userAuthenticate = yield user_model_1.default.findOne({
+            attributes: ['id', 'ROLE', 'NAME'],
             where: {
                 EMAIL: body.email,
-                PASSWORD: body.password
+                PASSWORD: body.password,
+                STATE: true
             }
         });
         if (!userAuthenticate) {
@@ -30,9 +33,13 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 message: 'Error in authentication, try again'
             });
         }
+        const id = userAuthenticate.getDataValue('id');
+        const user_role = userAuthenticate.getDataValue('ROLE');
+        const token = yield (0, generate_jwt_1.generateJWT)(id);
         res.json({
             userAuthenticate,
-            menu: (0, menu_front_1.getMenuFrontEnd)('ADMIN_ROLE')
+            token,
+            menu: (0, menu_front_1.getMenuFrontEnd)(user_role)
         });
     }
     catch (error) {

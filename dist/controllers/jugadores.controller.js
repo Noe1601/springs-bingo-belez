@@ -14,31 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteJugador = exports.updateJugador = exports.createJugador = exports.getJugadorById = exports.getJugadores = void 0;
 const jugadores_model_1 = __importDefault(require("../shared/models/jugadores.model"));
+const crud_service_1 = require("../shared/services/crud.service");
 const getJugadores = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const jugadores = yield jugadores_model_1.default.findAll({
-        where: {
-            state: true
-        }
-    });
-    res.json({
-        jugadores
-    });
+    (0, crud_service_1.get)({ where: { state: true } }, req, res, jugadores_model_1.default);
 });
 exports.getJugadores = getJugadores;
 const getJugadorById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const jugador = yield jugadores_model_1.default.findByPk(id);
-    if (jugador) {
-        res.json({
-            jugador
-        });
-    }
-    else {
-        res.status(404).json({
-            ok: false,
-            message: `Not exists jugador with ${id} number ID`
-        });
-    }
+    (0, crud_service_1.getById)(req, res, jugadores_model_1.default);
 });
 exports.getJugadorById = getJugadorById;
 const createJugador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,10 +28,7 @@ const createJugador = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const token = Math.floor(100000 + Math.random() * 900000);
         const buildJugador = Object.assign(Object.assign({}, body), { id: token });
-        const jugador = yield jugadores_model_1.default.create(buildJugador);
-        res.json({
-            jugador
-        });
+        (0, crud_service_1.create)(buildJugador, req, res, jugadores_model_1.default);
     }
     catch (error) {
         res.status(500).json({
@@ -60,37 +39,11 @@ const createJugador = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.createJugador = createJugador;
 const updateJugador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    const { id } = req.params;
-    try {
-        const jugador = yield jugadores_model_1.default.findByPk(id);
-        if (!jugador) {
-            return res.status(404).json({
-                message: `Not exists an jugador with this ID`
-            });
-        }
-        yield jugador.update(body);
-        res.json(jugador);
-    }
-    catch (error) {
-        res.status(500).json({
-            message: 'An unexpected error ocurred.'
-        });
-    }
+    (0, crud_service_1.update)(req, res, jugadores_model_1.default);
 });
 exports.updateJugador = updateJugador;
 const deleteJugador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const user = yield jugadores_model_1.default.findByPk(id);
-    if (!user) {
-        return res.status(404).json({
-            message: `Not exists an jugador with this ID`
-        });
-    }
-    yield user.update({ state: false });
-    res.json({
-        message: `User deleted`
-    });
+    (0, crud_service_1.deleteObject)({ state: false }, req, res, jugadores_model_1.default);
 });
 exports.deleteJugador = deleteJugador;
 //# sourceMappingURL=jugadores.controller.js.map
