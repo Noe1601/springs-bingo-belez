@@ -21,7 +21,7 @@ export const login = async(req: Request, res: Response) => {
         if(!userAuthenticate){
             return res.status(404).json({
                 ok: false,
-                message: 'Error in authentication, try again'
+                message: 'Credenciales invalidas'
             })
         }
 

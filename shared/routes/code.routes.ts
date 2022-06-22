@@ -3,6 +3,6 @@ import { createCodeVerification } from "../../controllers/code.controller";
 
 const router = Router();
 
-router.post('/',createCodeVerification);
+router.post('/:EMAIL',createCodeVerification);
 
 export default router;

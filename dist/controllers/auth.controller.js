@@ -30,7 +30,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!userAuthenticate) {
             return res.status(404).json({
                 ok: false,
-                message: 'Error in authentication, try again'
+                message: 'Credenciales invalidas'
             });
         }
         const id = userAuthenticate.getDataValue('id');

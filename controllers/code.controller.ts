@@ -5,7 +5,7 @@ import Code from "../shared/models/code.model";
 
 export const createCodeVerification = async(req: Request, res: Response) => {
 
-    const { body } = req;
+    const { EMAIL } = req.params;
 
     try {
 
@@ -18,8 +18,8 @@ export const createCodeVerification = async(req: Request, res: Response) => {
 
         const code = await Code.create(tokenObject);
 
-        if(body.email){
-            await sendEmail(body.email,token.toString());
+        if(EMAIL){
+            await sendEmail(EMAIL,token.toString());
         }
 
         res.json({

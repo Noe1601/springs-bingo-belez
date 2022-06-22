@@ -20,7 +20,8 @@ export default class Server {
         code: '/api/code',
         jugadas: '/api/jugadas',
         winners: '/api/winners',
-        jugadores: '/api/jugadores'
+        jugadores: '/api/jugadores',
+        settings: '/api/settings'
     }
 
     constructor(){

@@ -29,7 +29,8 @@ class Server {
             code: '/api/code',
             jugadas: '/api/jugadas',
             winners: '/api/winners',
-            jugadores: '/api/jugadores'
+            jugadores: '/api/jugadores',
+            settings: '/api/settings'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';

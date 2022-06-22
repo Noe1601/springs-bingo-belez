@@ -38,12 +38,12 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
         if (emailExists) {
             return res.status(400).json({
-                message: `Already exists an user with email ${body.EMAIL}, try with another one`
+                message: `Ya existe un usuario con el correo ${body.EMAIL}, intenta registrarte con algun otro.`
             });
         }
         if (body.CODE == null) {
             return res.status(400).json({
-                message: 'The token verification is required'
+                message: 'El token de verificacion es requerido'
             });
         }
         const verifyToken = yield code_model_1.default.findOne({
@@ -54,7 +54,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (!verifyToken) {
             return res.status(404).json({
                 ok: false,
-                message: 'This token is invalid, try again.'
+                message: 'Este token no es valido'
             });
         }
         const token = Math.floor(100000 + Math.random() * 900000);
@@ -107,12 +107,12 @@ const recuperatePassword = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
         if (!user) {
             return res.status(404).json({
-                message: `This email is invalid`
+                message: `Este correo es invalido`
             });
         }
         if (!body.code_confirmation) {
             return res.status(400).json({
-                message: 'The token verification is required'
+                message: 'El token de verificacion es requerido.'
             });
         }
         const verifyToken = yield code_model_1.default.findOne({
@@ -123,13 +123,15 @@ const recuperatePassword = (req, res) => __awaiter(void 0, void 0, void 0, funct
         if (!verifyToken) {
             return res.status(404).json({
                 ok: false,
-                message: 'This token is invalid, try again.'
+                message: 'El token de verificacion es invalido.'
             });
         }
-        yield user.update(body);
+        yield user.update({
+            PASSWORD: body.password
+        });
         res.status(202).json({
             ok: true,
-            message: 'Password updated'
+            message: 'Se actualizo correctamente.'
         });
     }
     catch (error) {

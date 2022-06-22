@@ -18,11 +18,11 @@ let transporter = nodemailer.createTransport({
     subject: `Welcome ✔`,
     html: `
         <h3>
-        Hello, welcome to tickNowAPP family.
+        Bienvenido a Bingo Velez
         <br>
-        Thanks for using the application, I hope you feel comfortable. ✔ 
+        Gracias por usar nuestra app, espero te sientas comodo. ✔ 
         <br>
-        Your verification code is: ${ code }
+        Tu codigo de verificacion es: ${ code }
         </h3>
     `
   });
