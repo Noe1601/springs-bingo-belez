@@ -13,7 +13,8 @@ export const getWinners = async(req: Request, res: Response) => {
 }
 
 export const getWinnersById = async(req: Request, res: Response) => {
-    getById(req,res,Jugador);
+    debugger
+    getById(req,res,Winner);
 }
 
 export const createWinner = async(req: Request, res: Response) => {

@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWinner = exports.updateWinner = exports.createWinner = exports.getWinnersById = exports.getWinners = void 0;
-const jugadores_model_1 = __importDefault(require("../shared/models/jugadores.model"));
 const winners_model_1 = __importDefault(require("../shared/models/winners.model"));
 const crud_service_1 = require("../shared/services/crud.service");
 const getWinners = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -24,7 +23,8 @@ const getWinners = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getWinners = getWinners;
 const getWinnersById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, crud_service_1.getById)(req, res, jugadores_model_1.default);
+    debugger;
+    (0, crud_service_1.getById)(req, res, winners_model_1.default);
 });
 exports.getWinnersById = getWinnersById;
 const createWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
