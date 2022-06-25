@@ -19,6 +19,7 @@ const auth_routes_1 = __importDefault(require("../shared/routes/auth.routes"));
 const jugadas_routes_1 = __importDefault(require("../shared/routes/jugadas.routes"));
 const winners_routes_1 = __importDefault(require("../shared/routes/winners.routes"));
 const jugadores_routes_1 = __importDefault(require("../shared/routes/jugadores.routes"));
+const play_winner_routes_1 = __importDefault(require("../shared/routes/play-winner.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
@@ -30,7 +31,8 @@ class Server {
             jugadas: '/api/jugadas',
             winners: '/api/winners',
             jugadores: '/api/jugadores',
-            settings: '/api/settings'
+            settings: '/api/settings',
+            playWinners: '/api/playwinners'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -55,6 +57,7 @@ class Server {
         this.app.use(this.paths.jugadas, jugadas_routes_1.default);
         this.app.use(this.paths.winners, winners_routes_1.default);
         this.app.use(this.paths.jugadores, jugadores_routes_1.default);
+        this.app.use(this.paths.playWinners, play_winner_routes_1.default);
     }
     middlewares() {
         this.app.use((0, cors_1.default)());

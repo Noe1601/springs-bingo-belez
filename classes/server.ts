@@ -5,6 +5,7 @@ import authRouter from '../shared/routes/auth.routes';
 import jugadasRouter from '../shared/routes/jugadas.routes';
 import winnerRouter from '../shared/routes/winners.routes';
 import jugadoresRouter from '../shared/routes/jugadores.routes';
+import playWinnersRouter from '../shared/routes/play-winner.routes';
 import cors from 'cors';
 import db from '../db/connection';
 
@@ -21,7 +22,8 @@ export default class Server {
         jugadas: '/api/jugadas',
         winners: '/api/winners',
         jugadores: '/api/jugadores',
-        settings: '/api/settings'
+        settings: '/api/settings',
+        playWinners: '/api/playwinners'
     }
 
     constructor(){
@@ -47,6 +49,7 @@ export default class Server {
         this.app.use( this.paths.jugadas, jugadasRouter );
         this.app.use( this.paths.winners, winnerRouter );
         this.app.use( this.paths.jugadores, jugadoresRouter );
+        this.app.use( this.paths.playWinners, playWinnersRouter );
     }
 
     middlewares(){

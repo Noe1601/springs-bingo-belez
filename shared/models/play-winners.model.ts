@@ -1,14 +1,11 @@
 import { DataTypes } from 'sequelize';
 import db from '../../db/connection';
 
-const Winner = db.define('Winners', {
+const PlaysAndWinners = db.define('PlaysAndWinners', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.STRING
     },
     createdAt: {
         type: DataTypes.DATE
@@ -28,4 +25,4 @@ const Winner = db.define('Winners', {
     freezeTableName: true
 });
 
-export default Winner;
+export default PlaysAndWinners;
