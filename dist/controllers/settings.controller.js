@@ -18,7 +18,9 @@ const crud_service_1 = require("../shared/services/crud.service");
 const configurateSettings = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
-        (0, crud_service_1.create)(body, req, res, settings_model_1.default);
+        const token = Math.floor(100000 + Math.random() * 900000);
+        const buildSettings = Object.assign(Object.assign({}, body), { id: token });
+        (0, crud_service_1.create)(buildSettings, req, res, settings_model_1.default);
     }
     catch (error) {
         console.log(error);

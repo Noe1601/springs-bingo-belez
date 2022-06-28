@@ -8,7 +8,15 @@ export const configurateSettings = async (req: Request, res: Response) => {
 
     try {
 
-        create(body, req, res, Settings);
+        const token = Math.floor(100000 + Math.random() * 900000)
+
+        const buildSettings = {
+            ...body,
+            id: token
+        }
+
+
+        create(buildSettings, req, res, Settings);
 
     } catch (error) {
         console.log(error);

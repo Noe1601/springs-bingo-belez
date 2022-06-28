@@ -16,6 +16,10 @@ const Settings = db.define('settings', {
     updatedAt: {
         type: DataTypes.DATE
     },
+    value: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
 }, {
     freezeTableName: true
 });

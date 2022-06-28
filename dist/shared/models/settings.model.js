@@ -20,6 +20,10 @@ const Settings = connection_1.default.define('settings', {
     updatedAt: {
         type: sequelize_1.DataTypes.DATE
     },
+    value: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
+    }
 }, {
     freezeTableName: true
 });
