@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { configurateSettings, getConfigurations, updateSettings } from "../../controllers/settings.controller";
+import { configurateSettings, getConfigurationById, getConfigurations, updateSettings } from "../../controllers/settings.controller";
 
 const router = Router();
 
 router.post('/', configurateSettings);
 
 router.get('/', getConfigurations);
+
+router.get('/:id', getConfigurationById);
 
 router.put('/:id', updateSettings);
 

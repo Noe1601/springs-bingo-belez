@@ -52,7 +52,7 @@ export const getConfigurationById = async (req: Request, res: Response) => {
 
     try {
 
-        const settings = Settings.findByPk(id);
+        const settings = await Settings.findByPk(id);
 
         if(!settings){
             res.status(404).json({

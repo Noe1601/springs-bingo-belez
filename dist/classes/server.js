@@ -21,6 +21,9 @@ const winners_routes_1 = __importDefault(require("../shared/routes/winners.route
 const jugadores_routes_1 = __importDefault(require("../shared/routes/jugadores.routes"));
 const play_winner_routes_1 = __importDefault(require("../shared/routes/play-winner.routes"));
 const settings_routes_1 = __importDefault(require("../shared/routes/settings.routes"));
+const upload_routes_1 = __importDefault(require("../shared/routes/upload.routes"));
+const partidas_routes_1 = __importDefault(require("../shared/routes/partidas.routes"));
+const partidas_jugador_routes_1 = __importDefault(require("../shared/routes/partidas-jugador.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
@@ -33,7 +36,10 @@ class Server {
             winners: '/api/winners',
             jugadores: '/api/jugadores',
             settings: '/api/settings',
-            playWinners: '/api/playwinners'
+            playWinners: '/api/playwinners',
+            uploadFiles: '/api/upload-field',
+            partidas: '/api/partidas',
+            partidaJugador: '/api/partida-jugador'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -60,6 +66,9 @@ class Server {
         this.app.use(this.paths.jugadores, jugadores_routes_1.default);
         this.app.use(this.paths.playWinners, play_winner_routes_1.default);
         this.app.use(this.paths.settings, settings_routes_1.default);
+        this.app.use(this.paths.uploadFiles, upload_routes_1.default);
+        this.app.use(this.paths.partidas, partidas_routes_1.default);
+        this.app.use(this.paths.partidaJugador, partidas_jugador_routes_1.default);
     }
     middlewares() {
         this.app.use((0, cors_1.default)());

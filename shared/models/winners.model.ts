@@ -23,6 +23,10 @@ const Winner = db.define('Winners', {
     jugador_id: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    monto: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     freezeTableName: true

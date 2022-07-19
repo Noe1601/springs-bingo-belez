@@ -7,6 +7,9 @@ import winnerRouter from '../shared/routes/winners.routes';
 import jugadoresRouter from '../shared/routes/jugadores.routes';
 import playWinnersRouter from '../shared/routes/play-winner.routes';
 import settingsRouter from '../shared/routes/settings.routes';
+import uploadRouter from '../shared/routes/upload.routes';
+import partidasRouter from '../shared/routes/partidas.routes';
+import partidasJugadorRouter from '../shared/routes/partidas-jugador.routes';
 import cors from 'cors';
 import db from '../db/connection';
 
@@ -24,7 +27,10 @@ export default class Server {
         winners: '/api/winners',
         jugadores: '/api/jugadores',
         settings: '/api/settings',
-        playWinners: '/api/playwinners'
+        playWinners: '/api/playwinners',
+        uploadFiles: '/api/upload-field',
+        partidas: '/api/partidas',
+        partidaJugador: '/api/partida-jugador'
     }
 
     constructor(){
@@ -52,6 +58,9 @@ export default class Server {
         this.app.use( this.paths.jugadores, jugadoresRouter );
         this.app.use( this.paths.playWinners, playWinnersRouter );
         this.app.use( this.paths.settings, settingsRouter );
+        this.app.use( this.paths.uploadFiles, uploadRouter );
+        this.app.use( this.paths.partidas, partidasRouter );
+        this.app.use( this.paths.partidaJugador, partidasJugadorRouter );
     }
 
     middlewares(){

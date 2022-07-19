@@ -27,6 +27,10 @@ const Winner = connection_1.default.define('Winners', {
     jugador_id: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
+    },
+    monto: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     freezeTableName: true

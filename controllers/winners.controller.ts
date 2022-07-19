@@ -43,7 +43,6 @@ export const createWinner = async(req: Request, res: Response) => {
     try {
 
         const token = Math.floor(100000 + Math.random() * 900000);
-        const tokenPlayWinners = Math.floor(100000 + Math.random() * 900000);
 
         if(!body.jugador_id || !body.jugada_id){
             return res.status(400).json({
@@ -72,17 +71,12 @@ export const createWinner = async(req: Request, res: Response) => {
         const buildWinner = {
             ...body,
             id: token,
-            jugada_id: body.jugada_id
+            jugada_id: body.jugada_id,
+            monto: body.monto
         }
 
-        const buildPlayWinner = {
-            id: tokenPlayWinners,
-            jugada_id: body.jugada_id,
-            jugador_id: body.jugador_id
-        }
 
         create(buildWinner,req,res,Winner);
-        create(buildPlayWinner,req,res,PlaysAndWinners);
         
     } catch (error) {
         console.log(error);

@@ -48,8 +48,10 @@ export const create = async (body: any, req: Request, res: Response, entity: any
         });
 
     } catch (error) {
+        console.log(error);
         res.status(500).json({
-            message: 'An unexpected error ocurred.'
+            message: 'An unexpected error ocurred.',
+            error
         })
     }
 }

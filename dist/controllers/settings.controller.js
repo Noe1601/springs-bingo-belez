@@ -49,7 +49,7 @@ exports.getConfigurations = getConfigurations;
 const getConfigurationById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        const settings = settings_model_1.default.findByPk(id);
+        const settings = yield settings_model_1.default.findByPk(id);
         if (!settings) {
             res.status(404).json({
                 message: 'No existe nada con esta clave.'

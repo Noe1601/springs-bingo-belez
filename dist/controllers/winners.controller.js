@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWinner = exports.updateWinner = exports.createWinner = exports.getWinnersById = exports.getWinners = void 0;
 const jugada_model_1 = __importDefault(require("../shared/models/jugada.model"));
 const jugadores_model_1 = __importDefault(require("../shared/models/jugadores.model"));
-const play_winners_model_1 = __importDefault(require("../shared/models/play-winners.model"));
 const winners_model_1 = __importDefault(require("../shared/models/winners.model"));
 const crud_service_1 = require("../shared/services/crud.service");
 const getWinners = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,7 +46,6 @@ const createWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     const { body } = req;
     try {
         const token = Math.floor(100000 + Math.random() * 900000);
-        const tokenPlayWinners = Math.floor(100000 + Math.random() * 900000);
         if (!body.jugador_id || !body.jugada_id) {
             return res.status(400).json({
                 ok: false,
@@ -68,14 +66,8 @@ const createWinner = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 message: 'Esta jugada no existe en la base de datos.'
             });
         }
-        const buildWinner = Object.assign(Object.assign({}, body), { id: token, jugada_id: body.jugada_id });
-        const buildPlayWinner = {
-            id: tokenPlayWinners,
-            jugada_id: body.jugada_id,
-            jugador_id: body.jugador_id
-        };
+        const buildWinner = Object.assign(Object.assign({}, body), { id: token, jugada_id: body.jugada_id, monto: body.monto });
         (0, crud_service_1.create)(buildWinner, req, res, winners_model_1.default);
-        (0, crud_service_1.create)(buildPlayWinner, req, res, play_winners_model_1.default);
     }
     catch (error) {
         console.log(error);

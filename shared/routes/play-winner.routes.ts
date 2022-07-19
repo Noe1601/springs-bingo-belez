@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getPlaysDetailsByPlayer } from "../../controllers/play-winners.controller";
+import { createPlayWinner, getPlaysDetailsByPlayer } from "../../controllers/play-winners.controller";
 
 const router = Router();
 
 router.get('/:id', getPlaysDetailsByPlayer);
+router.post('/', createPlayWinner);
 
 
 export default router;

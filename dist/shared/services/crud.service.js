@@ -45,8 +45,10 @@ const create = (body, req, res, entity) => __awaiter(void 0, void 0, void 0, fun
         });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({
-            message: 'An unexpected error ocurred.'
+            message: 'An unexpected error ocurred.',
+            error
         });
     }
 });
