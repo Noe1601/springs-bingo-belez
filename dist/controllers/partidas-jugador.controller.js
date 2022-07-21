@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePartidaJugador = exports.updatePartidaJugador = exports.createPartidaJugador = exports.getPartidasJugadorById = exports.getPartidasJugadorDesactivated = exports.getPartidasJugador = void 0;
+exports.getPlayersByPartida = exports.deletePartidaJugador = exports.updatePartidaJugador = exports.createPartidaJugador = exports.getPartidasJugadorById = exports.getPartidasJugadorDesactivated = exports.getPartidasJugador = void 0;
 const jugadores_model_1 = __importDefault(require("../shared/models/jugadores.model"));
 const partidas_jugador_model_1 = __importDefault(require("../shared/models/partidas-jugador.model"));
 const partidas_model_1 = __importDefault(require("../shared/models/partidas.model"));
 const crud_service_1 = require("../shared/services/crud.service");
+const sequelize_1 = require("sequelize");
 const getPartidasJugador = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     (0, crud_service_1.get)({ where: { state: true } }, req, res, partidas_jugador_model_1.default);
 });
@@ -78,4 +79,37 @@ const deletePartidaJugador = (req, res) => __awaiter(void 0, void 0, void 0, fun
     (0, crud_service_1.deleteObject)({ state: false }, req, res, partidas_jugador_model_1.default);
 });
 exports.deletePartidaJugador = deletePartidaJugador;
+const getPlayersByPartida = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    let ids = [];
+    const existsPartida = yield partidas_model_1.default.findOne({
+        where: {
+            id
+        }
+    });
+    if (!existsPartida) {
+        return res.status(404).json({
+            message: 'Esta partida no existe.'
+        });
+    }
+    const getRelationByPartidaId = yield partidas_jugador_model_1.default.findAll({
+        where: {
+            partida_id: id
+        }
+    });
+    getRelationByPartidaId.forEach((x) => {
+        ids.push(x.jugador_id);
+    });
+    const jugadores = yield jugadores_model_1.default.findAll({
+        where: {
+            id: {
+                [sequelize_1.Op.in]: ids
+            }
+        }
+    });
+    return res.json({
+        jugadores
+    });
+});
+exports.getPlayersByPartida = getPlayersByPartida;
 //# sourceMappingURL=partidas-jugador.controller.js.map

@@ -9,5 +9,6 @@ router.get('/:id', partidas_controller_1.getPartidaById);
 router.post('/', partidas_jugador_controller_1.createPartidaJugador);
 router.put('/:id', partidas_jugador_controller_1.updatePartidaJugador);
 router.delete('/:id', partidas_jugador_controller_1.deletePartidaJugador);
+router.get('/partidas/:id', partidas_jugador_controller_1.getPlayersByPartida);
 exports.default = router;
 //# sourceMappingURL=partidas-jugador.routes.js.map
