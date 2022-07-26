@@ -63,6 +63,7 @@ export const createPlayWinner = async(req: Request, res: Response) => {
         id: tokenPlayWinners,
         jugada_id: body.jugada_id,
         jugador_id: body.jugador_id,
+        partida_id: body.partida_id
     }
 
     create(buildPlayWinner,req,res,PlaysAndWinners);

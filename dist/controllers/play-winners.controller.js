@@ -63,6 +63,7 @@ const createPlayWinner = (req, res) => __awaiter(void 0, void 0, void 0, functio
         id: tokenPlayWinners,
         jugada_id: body.jugada_id,
         jugador_id: body.jugador_id,
+        partida_id: body.partida_id
     };
     (0, crud_service_1.create)(buildPlayWinner, req, res, play_winners_model_1.default);
 });

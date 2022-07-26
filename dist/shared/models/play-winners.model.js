@@ -24,6 +24,10 @@ const PlaysAndWinners = connection_1.default.define('PlaysAndWinners', {
     jugador_id: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false
+    },
+    partida_id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     freezeTableName: true

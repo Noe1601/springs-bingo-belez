@@ -20,6 +20,10 @@ const PlaysAndWinners = db.define('PlaysAndWinners', {
     jugador_id: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    partida_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
 }, {
     freezeTableName: true
