@@ -16,16 +16,16 @@ exports.createCodeVerification = void 0;
 const send_email_1 = require("../shared/helper/send-email");
 const code_model_1 = __importDefault(require("../shared/models/code.model"));
 const createCodeVerification = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
+    const { EMAIL } = req.params;
     try {
         const token = Math.floor(100000 + Math.random() * 900000);
         const tokenObject = {
-            id: 3,
+            id: token,
             CODE: token
         };
         const code = yield code_model_1.default.create(tokenObject);
-        if (body.email) {
-            yield (0, send_email_1.sendEmail)(body.email, token.toString());
+        if (EMAIL) {
+            yield (0, send_email_1.sendEmail)(EMAIL, token.toString());
         }
         res.json({
             code

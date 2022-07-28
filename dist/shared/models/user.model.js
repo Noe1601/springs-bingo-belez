@@ -8,7 +8,8 @@ const connection_1 = __importDefault(require("../../db/connection"));
 const User = connection_1.default.define('Users', {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
     },
     NAME: {
         type: sequelize_1.DataTypes.STRING
@@ -24,6 +25,9 @@ const User = connection_1.default.define('Users', {
     },
     ROLE: {
         type: sequelize_1.DataTypes.STRING
+    },
+    STATE: {
+        type: sequelize_1.DataTypes.BOOLEAN
     },
     createdAt: {
         type: sequelize_1.DataTypes.DATE

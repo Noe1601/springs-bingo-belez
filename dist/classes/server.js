@@ -15,10 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const users_routes_1 = __importDefault(require("../shared/routes/users.routes"));
 const code_routes_1 = __importDefault(require("../shared/routes/code.routes"));
-// import authRouter from '../../infraestructure/routes/auth.routes';
-// import codeRouter from '../../infraestructure/routes/code.routes';
-// import stablishmentRouter from '../../infraestructure/routes/stablishment.routes';
-// import workerRouter from '../../infraestructure/routes/worker.routes';
+const auth_routes_1 = __importDefault(require("../shared/routes/auth.routes"));
+const jugadas_routes_1 = __importDefault(require("../shared/routes/jugadas.routes"));
+const winners_routes_1 = __importDefault(require("../shared/routes/winners.routes"));
+const jugadores_routes_1 = __importDefault(require("../shared/routes/jugadores.routes"));
+const play_winner_routes_1 = __importDefault(require("../shared/routes/play-winner.routes"));
+const settings_routes_1 = __importDefault(require("../shared/routes/settings.routes"));
+const upload_routes_1 = __importDefault(require("../shared/routes/upload.routes"));
+const partidas_routes_1 = __importDefault(require("../shared/routes/partidas.routes"));
+const partidas_jugador_routes_1 = __importDefault(require("../shared/routes/partidas-jugador.routes"));
+const partidas_jugadas_routes_1 = __importDefault(require("../shared/routes/partidas-jugadas.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
@@ -27,8 +33,15 @@ class Server {
             users: '/api/users',
             auth: '/api/auth',
             code: '/api/code',
-            stablishment: '/api/stablishment',
-            workers: '/api/workers'
+            jugadas: '/api/jugadas',
+            winners: '/api/winners',
+            jugadores: '/api/jugadores',
+            settings: '/api/settings',
+            playWinners: '/api/playwinners',
+            uploadFiles: '/api/upload-field',
+            partidas: '/api/partidas',
+            partidaJugador: '/api/partida-jugador',
+            partidaJugada: '/api/partida-jugada'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -48,10 +61,17 @@ class Server {
     }
     routes() {
         this.app.use(this.paths.users, users_routes_1.default);
-        // this.app.use( this.paths.auth, authRouter );
+        this.app.use(this.paths.auth, auth_routes_1.default);
         this.app.use(this.paths.code, code_routes_1.default);
-        // this.app.use( this.paths.stablishment, stablishmentRouter );
-        // this.app.use( this.paths.workers, workerRouter );
+        this.app.use(this.paths.jugadas, jugadas_routes_1.default);
+        this.app.use(this.paths.winners, winners_routes_1.default);
+        this.app.use(this.paths.jugadores, jugadores_routes_1.default);
+        this.app.use(this.paths.playWinners, play_winner_routes_1.default);
+        this.app.use(this.paths.settings, settings_routes_1.default);
+        this.app.use(this.paths.uploadFiles, upload_routes_1.default);
+        this.app.use(this.paths.partidas, partidas_routes_1.default);
+        this.app.use(this.paths.partidaJugador, partidas_jugador_routes_1.default);
+        this.app.use(this.paths.partidaJugada, partidas_jugadas_routes_1.default);
     }
     middlewares() {
         this.app.use((0, cors_1.default)());

@@ -12,41 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.recuperatePassword = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUser = exports.getUsers = void 0;
-// import { sendEmail } from "../../infraestructure/helpers/send-email";
-// import Code from "../../domain/models/code-model";
+exports.recuperatePassword = exports.activateUser = exports.deleteUser = exports.updateUser = exports.createUser = exports.getUserById = exports.getUsersDesactivated = exports.getUsers = void 0;
 const user_model_1 = __importDefault(require("../shared/models/user.model"));
 const code_model_1 = __importDefault(require("../shared/models/code.model"));
+const crud_service_1 = require("../shared/services/crud.service");
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_model_1.default.findAll({
-        where: {
-            STATE: 1
-        }
-    });
-    res.json({
-        users
-    });
+    (0, crud_service_1.get)({ where: { STATE: true } }, req, res, user_model_1.default);
 });
 exports.getUsers = getUsers;
-const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const user = yield user_model_1.default.findByPk(id);
-    if (user) {
-        res.json({
-            user
-        });
-    }
-    else {
-        res.status(404).json({
-            ok: false,
-            message: `Not exists user with ${id} number ID`
-        });
-    }
+const getUsersDesactivated = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, crud_service_1.get)({ where: { STATE: false } }, req, res, user_model_1.default);
 });
-exports.getUser = getUser;
+exports.getUsersDesactivated = getUsersDesactivated;
+const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    (0, crud_service_1.getById)(req, res, user_model_1.default);
+});
+exports.getUserById = getUserById;
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    console.log(body);
     try {
         const emailExists = yield user_model_1.default.findOne({
             where: {
@@ -55,12 +38,12 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
         if (emailExists) {
             return res.status(400).json({
-                message: `Already exists an user with email ${body.EMAIL}, try with another one`
+                message: `Ya existe un usuario con el correo ${body.EMAIL}, intenta registrarte con algun otro.`
             });
         }
         if (body.CODE == null) {
             return res.status(400).json({
-                message: 'The token verification is required'
+                message: 'El token de verificacion es requerido'
             });
         }
         const verifyToken = yield code_model_1.default.findOne({
@@ -71,13 +54,12 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         if (!verifyToken) {
             return res.status(404).json({
                 ok: false,
-                message: 'This token is invalid, try again.'
+                message: 'Este token no es valido'
             });
         }
-        const user = yield user_model_1.default.create(body);
-        res.json({
-            user,
-        });
+        const token = Math.floor(100000 + Math.random() * 900000);
+        const userObject = Object.assign(Object.assign({}, body), { id: token });
+        (0, crud_service_1.create)(userObject, req, res, user_model_1.default);
     }
     catch (error) {
         res.status(500).json({
@@ -88,72 +70,68 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createUser = createUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    const { id } = req.params;
-    try {
-        const user = yield user_model_1.default.findByPk(id);
-        if (!user) {
-            return res.status(404).json({
-                message: `Not exists an user with this ID`
-            });
-        }
-        yield user.update(body);
-        res.json(user);
-    }
-    catch (error) {
-        res.status(500).json({
-            message: 'An unexpected error ocurred.'
-        });
-    }
+    (0, crud_service_1.update)(req, res, user_model_1.default);
 });
 exports.updateUser = updateUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const user = yield user_model_1.default.findByPk(id);
-    if (!user) {
-        return res.status(404).json({
-            message: `Not exists an user with this ID`
-        });
-    }
-    yield user.update({ state: false });
-    res.json({
-        message: `User deleted`
-    });
+    (0, crud_service_1.deleteObject)({ STATE: false }, req, res, user_model_1.default);
 });
 exports.deleteUser = deleteUser;
+const activateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const userToActivate = yield user_model_1.default.findOne({
+        where: {
+            id,
+            STATE: false
+        }
+    });
+    if (!userToActivate) {
+        return res.status(204).json({
+            ok: false,
+            message: `User with ${id} not is desactivated`
+        });
+    }
+    const userUpdated = yield userToActivate.update({ STATE: true });
+    res.status(200).json({
+        userUpdated
+    });
+});
+exports.activateUser = activateUser;
 const recuperatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
         const user = yield user_model_1.default.findOne({
             where: {
-                email: body.email
+                EMAIL: body.email
             }
         });
         if (!user) {
             return res.status(404).json({
-                message: `This email is invalid`
+                message: `Este correo es invalido`
             });
         }
-        if (body.code_confirmation == null) {
+        if (!body.code_confirmation) {
             return res.status(400).json({
-                message: 'The token verification is required'
+                message: 'El token de verificacion es requerido.'
             });
         }
         const verifyToken = yield code_model_1.default.findOne({
             where: {
-                code: body.code_confirmation
+                CODE: body.code_confirmation
             }
         });
         if (!verifyToken) {
             return res.status(404).json({
                 ok: false,
-                message: 'This token is invalid, try again.'
+                message: 'El token de verificacion es invalido.'
             });
         }
-        yield user.update(body);
-        res.json({
+        yield user.update({
+            PASSWORD: body.password
+        });
+        res.status(202).json({
             ok: true,
-            message: 'Password updated'
+            message: 'Se actualizo correctamente.'
         });
     }
     catch (error) {

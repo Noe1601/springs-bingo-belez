@@ -1,48 +1,25 @@
 import { Request, Response } from "express";
-import { BulkRecordError } from "sequelize/types";
-// import { sendEmail } from "../../infraestructure/helpers/send-email";
-// import Code from "../../domain/models/code-model";
 import User from "../shared/models/user.model";
 import Code from "../shared/models/code.model";
+import { create, deleteObject, get, getById, update } from "../shared/services/crud.service";
 
-export const getUsers = async(req: Request, res: Response) => {
-
-    const users = await User.findAll({
-        where: {
-            STATE: 1
-        }
-    });
-
-    res.json({
-        users
-    })
+export const getUsers = async (req: Request, res: Response) => {
+    get({ where: { STATE: true } }, req, res, User);
 }
 
-export const getUser = async(req: Request, res: Response) => {
-
-    const { id } = req.params;
-
-    const user = await User.findByPk(id);
-
-    if(user){
-        res.json({
-            user
-        })
-    }else{
-        res.status(404).json({
-            ok: false,
-            message: `Not exists user with ${ id } number ID`
-        })
-    }
-
- 
+export const getUsersDesactivated = async (req: Request, res: Response) => {
+    get({ where: { STATE: false } }, req, res, User);
 }
 
-export const createUser = async(req: Request, res: Response) => {
-    
+export const getUserById = async (req: Request, res: Response) => {
+    getById(req, res, User);
+}
+
+
+export const createUser = async (req: Request, res: Response) => {
+
     const { body } = req;
 
-    console.log(body);
     try {
 
         const emailExists = await User.findOne({
@@ -51,16 +28,16 @@ export const createUser = async(req: Request, res: Response) => {
             }
         })
 
-        if(emailExists){
+        if (emailExists) {
             return res.status(400).json({
-                message: `Already exists an user with email ${ body.EMAIL }, try with another one`
+                message: `Ya existe un usuario con el correo ${body.EMAIL}, intenta registrarte con algun otro.`
             });
         }
 
 
-        if(body.CODE == null){
+        if (body.CODE == null) {
             return res.status(400).json({
-                message: 'The token verification is required'
+                message: 'El token de verificacion es requerido'
             })
         }
 
@@ -70,19 +47,22 @@ export const createUser = async(req: Request, res: Response) => {
             }
         })
 
-        if(!verifyToken){
+        if (!verifyToken) {
             return res.status(404).json({
                 ok: false,
-                message: 'This token is invalid, try again.'
+                message: 'Este token no es valido'
             })
         }
 
-        const user = await User.create(body);
+        const token = Math.floor(100000 + Math.random() * 900000)
 
-        res.json({
-            user,
-        });
-        
+        const userObject = {
+            ...body,
+            id: token
+        }
+
+        create(userObject, req, res, User);
+
     } catch (error) {
         res.status(500).json({
             message: 'An unexpected error ocurred.'
@@ -92,95 +72,83 @@ export const createUser = async(req: Request, res: Response) => {
 
 }
 
-export const  updateUser = async(req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response) => {
+    update(req, res, User);
+}
 
-    const { body } = req;
+export const deleteUser = async (req: Request, res: Response) => {
+    deleteObject({ STATE: false }, req, res, User);
+}
+
+export const activateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    try {
-
-        const user = await User.findByPk(id);
-
-        if(!user){
-            return res.status(404).json({
-                message: `Not exists an user with this ID`
-            });
+    const userToActivate = await User.findOne({
+        where: {
+            id,
+            STATE: false
         }
+    })
 
-        await user.update( body );
-        
-        res.json(user);
-
-    } catch (error) {
-        res.status(500).json({
-            message: 'An unexpected error ocurred.'
+    if (!userToActivate) {
+        return res.status(204).json({
+            ok: false,
+            message: `User with ${id} not is desactivated`
         })
     }
-}
 
-export const deleteUser = async(req: Request, res: Response) => {
 
-    const { id } = req.params;
+    const userUpdated = await userToActivate.update({ STATE: true });
 
-    const user = await User.findByPk(id);
-
-    if(!user){
-        return res.status(404).json({
-            message: `Not exists an user with this ID`
-        });
-    }
-
-    await user.update({ state: false });
-
-    res.json({
-        message: `User deleted`
-    });
-
+    res.status(200).json({
+        userUpdated
+    })
 }
 
 
-export const recuperatePassword = async(req: Request, res: Response) => {
+export const recuperatePassword = async (req: Request, res: Response) => {
 
     const { body } = req;
 
     try {
-
-        const user = await User.findOne({ 
+        const user = await User.findOne({
             where: {
-                email: body.email
+                EMAIL: body.email
             }
         });
 
-        if(!user){
+        if (!user) {
             return res.status(404).json({
-                message: `This email is invalid`
+                message: `Este correo es invalido`
             });
         }
 
-        if(body.code_confirmation == null){
+        if (!body.code_confirmation) {
             return res.status(400).json({
-                message: 'The token verification is required'
+                message: 'El token de verificacion es requerido.'
             })
         }
 
         const verifyToken = await Code.findOne({
             where: {
-                code: body.code_confirmation
+                CODE: body.code_confirmation
             }
         })
 
-        if(!verifyToken){
+        if (!verifyToken) {
             return res.status(404).json({
                 ok: false,
-                message: 'This token is invalid, try again.'
+                message: 'El token de verificacion es invalido.'
             })
         }
 
-        await user.update( body );
-        
-        res.json({
+        await user.update({
+            PASSWORD: body.password
+        });
+
+        res.status(202).json({
             ok: true,
-            message: 'Password updated'
+            message: 'Se actualizo correctamente.'
         });
 
     } catch (error) {

@@ -4,7 +4,8 @@ import db from '../../db/connection';
 const User = db.define('Users', {
     id: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true,
     },
     NAME: {
         type: DataTypes.STRING
@@ -20,6 +21,9 @@ const User = db.define('Users', {
     },
     ROLE: {
         type: DataTypes.STRING
+    },
+    STATE: {
+        type: DataTypes.BOOLEAN
     },
     createdAt: {
         type: DataTypes.DATE

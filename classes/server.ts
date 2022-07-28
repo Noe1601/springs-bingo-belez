@@ -1,10 +1,16 @@
 import express, { Application } from 'express';
 import userRouter from '../shared/routes/users.routes';
 import codeRouter from '../shared/routes/code.routes';
-// import authRouter from '../../infraestructure/routes/auth.routes';
-// import codeRouter from '../../infraestructure/routes/code.routes';
-// import stablishmentRouter from '../../infraestructure/routes/stablishment.routes';
-// import workerRouter from '../../infraestructure/routes/worker.routes';
+import authRouter from '../shared/routes/auth.routes';
+import jugadasRouter from '../shared/routes/jugadas.routes';
+import winnerRouter from '../shared/routes/winners.routes';
+import jugadoresRouter from '../shared/routes/jugadores.routes';
+import playWinnersRouter from '../shared/routes/play-winner.routes';
+import settingsRouter from '../shared/routes/settings.routes';
+import uploadRouter from '../shared/routes/upload.routes';
+import partidasRouter from '../shared/routes/partidas.routes';
+import partidasJugadorRouter from '../shared/routes/partidas-jugador.routes';
+import partidasJugadasRouter from '../shared/routes/partidas-jugadas.routes';
 import cors from 'cors';
 import db from '../db/connection';
 
@@ -18,8 +24,15 @@ export default class Server {
         users: '/api/users',
         auth: '/api/auth',
         code: '/api/code',
-        stablishment: '/api/stablishment',
-        workers: '/api/workers'
+        jugadas: '/api/jugadas',
+        winners: '/api/winners',
+        jugadores: '/api/jugadores',
+        settings: '/api/settings',
+        playWinners: '/api/playwinners',
+        uploadFiles: '/api/upload-field',
+        partidas: '/api/partidas',
+        partidaJugador: '/api/partida-jugador',
+        partidaJugada: '/api/partida-jugada'
     }
 
     constructor(){
@@ -40,10 +53,17 @@ export default class Server {
 
     routes(){
         this.app.use( this.paths.users, userRouter);
-        // this.app.use( this.paths.auth, authRouter );
+        this.app.use( this.paths.auth, authRouter );
         this.app.use( this.paths.code, codeRouter );
-        // this.app.use( this.paths.stablishment, stablishmentRouter );
-        // this.app.use( this.paths.workers, workerRouter );
+        this.app.use( this.paths.jugadas, jugadasRouter );
+        this.app.use( this.paths.winners, winnerRouter );
+        this.app.use( this.paths.jugadores, jugadoresRouter );
+        this.app.use( this.paths.playWinners, playWinnersRouter );
+        this.app.use( this.paths.settings, settingsRouter );
+        this.app.use( this.paths.uploadFiles, uploadRouter );
+        this.app.use( this.paths.partidas, partidasRouter );
+        this.app.use( this.paths.partidaJugador, partidasJugadorRouter );
+        this.app.use( this.paths.partidaJugada, partidasJugadasRouter );
     }
 
     middlewares(){

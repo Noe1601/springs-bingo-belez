@@ -5,21 +5,21 @@ import Code from "../shared/models/code.model";
 
 export const createCodeVerification = async(req: Request, res: Response) => {
 
-    const { body } = req;
+    const { EMAIL } = req.params;
 
     try {
 
         const token = Math.floor(100000 + Math.random() * 900000)
 
         const tokenObject = {
-            id: 3,
+            id: token,
             CODE: token
         }
 
         const code = await Code.create(tokenObject);
 
-        if(body.email){
-            await sendEmail(body.email,token.toString());
+        if(EMAIL){
+            await sendEmail(EMAIL,token.toString());
         }
 
         res.json({
