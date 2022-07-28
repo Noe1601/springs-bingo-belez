@@ -24,6 +24,7 @@ const settings_routes_1 = __importDefault(require("../shared/routes/settings.rou
 const upload_routes_1 = __importDefault(require("../shared/routes/upload.routes"));
 const partidas_routes_1 = __importDefault(require("../shared/routes/partidas.routes"));
 const partidas_jugador_routes_1 = __importDefault(require("../shared/routes/partidas-jugador.routes"));
+const partidas_jugadas_routes_1 = __importDefault(require("../shared/routes/partidas-jugadas.routes"));
 const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
@@ -39,7 +40,8 @@ class Server {
             playWinners: '/api/playwinners',
             uploadFiles: '/api/upload-field',
             partidas: '/api/partidas',
-            partidaJugador: '/api/partida-jugador'
+            partidaJugador: '/api/partida-jugador',
+            partidaJugada: '/api/partida-jugada'
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
@@ -69,6 +71,7 @@ class Server {
         this.app.use(this.paths.uploadFiles, upload_routes_1.default);
         this.app.use(this.paths.partidas, partidas_routes_1.default);
         this.app.use(this.paths.partidaJugador, partidas_jugador_routes_1.default);
+        this.app.use(this.paths.partidaJugada, partidas_jugadas_routes_1.default);
     }
     middlewares() {
         this.app.use((0, cors_1.default)());

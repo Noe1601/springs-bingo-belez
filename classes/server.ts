@@ -10,6 +10,7 @@ import settingsRouter from '../shared/routes/settings.routes';
 import uploadRouter from '../shared/routes/upload.routes';
 import partidasRouter from '../shared/routes/partidas.routes';
 import partidasJugadorRouter from '../shared/routes/partidas-jugador.routes';
+import partidasJugadasRouter from '../shared/routes/partidas-jugadas.routes';
 import cors from 'cors';
 import db from '../db/connection';
 
@@ -30,7 +31,8 @@ export default class Server {
         playWinners: '/api/playwinners',
         uploadFiles: '/api/upload-field',
         partidas: '/api/partidas',
-        partidaJugador: '/api/partida-jugador'
+        partidaJugador: '/api/partida-jugador',
+        partidaJugada: '/api/partida-jugada'
     }
 
     constructor(){
@@ -61,6 +63,7 @@ export default class Server {
         this.app.use( this.paths.uploadFiles, uploadRouter );
         this.app.use( this.paths.partidas, partidasRouter );
         this.app.use( this.paths.partidaJugador, partidasJugadorRouter );
+        this.app.use( this.paths.partidaJugada, partidasJugadasRouter );
     }
 
     middlewares(){
